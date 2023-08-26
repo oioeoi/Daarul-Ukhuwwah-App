@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
-    scaffoldBackgroundColor: Colors.grey[100],
     primaryColor: Color.fromARGB(255, 253, 167, 5),
     appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
@@ -15,7 +14,8 @@ ThemeData lightTheme = ThemeData(
           fontSize: 20.0,
         )),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white.withOpacity(0.5),
+        elevation: 0,
         selectedItemColor: Colors.black,
         selectedLabelStyle: TextStyle(
           color: Colors.black,
@@ -23,8 +23,8 @@ ThemeData lightTheme = ThemeData(
           fontSize: 12.0,
         )),
     colorScheme: ColorScheme.light(
-      background: Colors.grey[100]!,
-      primary: Colors.grey[200]!,
+      background: Colors.grey[200]!,
+      primary: Colors.grey[100]!,
       secondary: Colors.grey[300]!,
     ),
     iconTheme: IconThemeData(color: Colors.black),

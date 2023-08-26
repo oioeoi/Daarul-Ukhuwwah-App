@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:daarul_ukhuwwah_media/bloc/hide_navbar.dart';
 import 'package:daarul_ukhuwwah_media/pages/AlbumPage.dart';
 import 'package:daarul_ukhuwwah_media/pages/HomePage.dart';
@@ -35,21 +37,16 @@ class _MyNavBarState extends State<MyNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _barPage[selectedIndex],
-      bottomNavigationBar: Consumer<BottomBarVisibilityProvider>(
-        builder: (context, bottomBarVisibilityProvider, child) =>
-            AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          child: bottomBarVisibilityProvider.isVisible
-              ? BottomNavigationBar(
-                  currentIndex: selectedIndex,
-                  onTap: (newIndex) => setState(() => selectedIndex = newIndex),
-                  items: bottomBarItems(),
-                )
-              : Wrap(),
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        _barPage[selectedIndex],
+        BottomNavigationBar(
+          currentIndex: selectedIndex,
+          onTap: (newIndex) => setState(() => selectedIndex = newIndex),
+          items: bottomBarItems(),
         ),
-      ),
+      ],
     );
   }
 }
