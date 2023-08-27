@@ -55,35 +55,6 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget build(BuildContext context) {
     Widget appBarContent = widget.content;
 
-    GestureDetector(
-      onTap: () {},
-      child: Container(
-        color: _scrolledUnder
-            ? Theme.of(context).colorScheme.background.withOpacity(0.1)
-            : Theme.of(context).colorScheme.background,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(
-              height: 8,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Daarul Ukhuwwah Putra 1",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Icon(
-                  Icons.arrow_drop_down_rounded,
-                  size: 30,
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
     if (_scrolledUnder)
       appBarContent = ClipRRect(
         child: BackdropFilter(
