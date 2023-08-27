@@ -1,52 +1,72 @@
-// import 'dart:ui';
+import 'dart:ui';
+import 'package:flutter/material.dart';
 
-// import 'package:daarul_ukhuwwah_media/bloc/hide_navbar.dart';
-// import 'package:daarul_ukhuwwah_media/pages/AlbumPage.dart';
-// import 'package:daarul_ukhuwwah_media/pages/HomePage.dart';
-// import 'package:daarul_ukhuwwah_media/pages/ProfilePage.dart';
-// import 'package:flutter/material.dart';
-// import 'package:ionicons/ionicons.dart';
-// import 'package:provider/provider.dart';
+class MyNavBar extends StatefulWidget implements PreferredSizeWidget {
+  final Widget content;
 
-// class MyNavBar extends StatefulWidget {
-//   const MyNavBar({Key? key}) : super(key: key);
-//   @override
-//   State<MyNavBar> createState() => _MyNavBarState();
-// }
+  const MyNavBar({super.key, required this.content});
+  @override
+  State<MyNavBar> createState() => _MyNavBarState();
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
 
-// class _MyNavBarState extends State<MyNavBar> {
-  
+class _MyNavBarState extends State<MyNavBar> {
+  ScrollNotificationObserverState? _scrollNotificationObserver;
+  bool _scrolledUnder = false;
 
-//   List<BottomNavigationBarItem> bottomBarItems() {
-//     return [
-//       BottomNavigationBarItem(
-//           icon: Icon(Ionicons.home_outline),
-//           activeIcon: Icon(Ionicons.home),
-//           label: 'Home'),
-//       BottomNavigationBarItem(
-//           icon: Icon(Ionicons.albums_outline),
-//           activeIcon: Icon(Ionicons.albums),
-//           label: 'Albums'),
-//       BottomNavigationBarItem(
-//           icon: Icon(Ionicons.settings_outline),
-//           activeIcon: Icon(Ionicons.settings),
-//           label: 'Setting')
-//     ];
-//   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scrollNotificationObserver?.removeListener(_handleScrollNotification);
+    _scrollNotificationObserver = ScrollNotificationObserver.maybeOf(context);
+    _scrollNotificationObserver?.addListener(_handleScrollNotification);
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-//     // Stack(
-//     //   alignment: Alignment.bottomCenter,
-//     //   children: [
-//     //     _barPage[selectedIndex],
-//     //     BottomNavigationBar(
-//     //       currentIndex: selectedIndex,
-//     //       onTap: (newIndex) => setState(() => selectedIndex = newIndex),
-//     //       items: bottomBarItems(),
-//     //     ),
-//     //   ],
-//     // );
-//   }
-// }
+  @override
+  void dispose() {
+    if (_scrollNotificationObserver != null) {
+      _scrollNotificationObserver!.removeListener(_handleScrollNotification);
+      _scrollNotificationObserver = null;
+    }
+    super.dispose();
+  }
+
+  void _handleScrollNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      final bool oldScrolledUnder = _scrolledUnder;
+      final ScrollMetrics metrics = notification.metrics;
+      switch (metrics.axisDirection) {
+        case AxisDirection.up:
+          _scrolledUnder = metrics.extentAfter > 0;
+        case AxisDirection.down:
+          _scrolledUnder = metrics.extentBefore > 0;
+        case AxisDirection.right:
+        case AxisDirection.left:
+          break;
+      }
+
+      if (_scrolledUnder != oldScrolledUnder) {
+        setState(() {});
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget navBarContent = widget.content;
+
+    navBarContent = ClipRRect(
+      child: BackdropFilter(
+        child: Container(
+          color: Theme.of(context).colorScheme.background.withOpacity(0.65),
+          child: navBarContent,
+        ),
+        filter: ImageFilter.blur(
+          sigmaY: 10,
+          sigmaX: 10,
+        ),
+      ),
+    );
+    return navBarContent;
+  }
+}

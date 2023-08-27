@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
         darkTheme: darkTheme,
         home: Scaffold(
           extendBodyBehindAppBar: true,
+          extendBody: true,
           appBar: MyAppBar(
             content: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -72,8 +73,10 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           body: _barPage[selectedIndex],
-          bottomNavigationBar: Row(
-            children: _navBarItemList,
+          bottomNavigationBar: MyNavBar(
+            content: Row(
+              children: _navBarItemList,
+            ),
           ),
         ),
       ),
@@ -92,14 +95,21 @@ class _MyAppState extends State<MyApp> {
       },
       child: SafeArea(
         child: Container(
-          alignment: Alignment.center,
+          alignment: Alignment.bottomCenter,
           width: MediaQuery.of(context).size.width / iconList.length,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.white10,
+          height: 60,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(
+                index == selectedIndex ? iconSelected : icon,
+                color: index == selectedIndex ? Colors.blue : Colors.grey,
+              ),
+              Text(
+                'Home',
+              )
+            ],
           ),
-          child: Icon(index == selectedIndex ? iconSelected : icon,
-              color: index == selectedIndex ? Colors.blue : Colors.grey),
         ),
       ),
     );
