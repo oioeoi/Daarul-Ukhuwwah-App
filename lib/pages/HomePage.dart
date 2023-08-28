@@ -1,5 +1,4 @@
-import 'dart:ui';
-import 'package:daarul_ukhuwwah_media/component/appbar.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -10,31 +9,90 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _isLoading = true;
+  String json = '';
+  List<Map<String, dynamic>> products = [];
+
+  void getData() async {
+    var url = 'https://dummyjson.com/products';
+    try {
+      var response = await Dio().get(url);
+      if (response.statusCode == 200) {
+        setState(
+          () {
+            products =
+                List<Map<String, dynamic>>.from(response.data['products']);
+            _isLoading = false;
+          },
+        );
+        print(products);
+        print(products.length);
+      }
+    } catch (e) {
+      print('ini errornya : ' + e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: false,
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          height: 350,
-          color: Colors.grey[400],
-          child: Column(
-            children: [
-              Container(
-                height: 300,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                        'https://www.daarul-ukhuwwah.org/wp-content/uploads/2022/10/IMG_0023-940x528.jpg'),
-                    fit: BoxFit.fitHeight,
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
+            ),
+          )
+        : SingleChildScrollView(
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: products.length,
+              itemBuilder: (BuildContext context, int index) {
+                Map<String, dynamic> product = products[index];
+                List images = product['images'];
+                // print(images.length);
+                // print(images);
+                String imageUrl = images.isNotEmpty ? images[0].toString() : '';
+                return Container(
+                  height: 600,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: _isLoading ? Colors.grey : Colors.grey[100],
+                          image: DecorationImage(
+                            image: NetworkImage(imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          product['title'].toString(),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          product['description'].toString(),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          images.toString(),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+                );
+              },
+            ),
+          );
   }
 }

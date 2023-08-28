@@ -1,9 +1,9 @@
-class Movie {
-  String id;
+class Product {
+  String image;
   String item;
 
-  Movie({
-    required this.id,
-    required this.item,
+  Product({
+    this.image = '',
+    this.item = '',
   });
 }

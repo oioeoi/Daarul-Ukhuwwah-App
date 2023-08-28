@@ -59,7 +59,7 @@ class _MyAppBarState extends State<MyAppBar> {
       appBarContent = ClipRRect(
         child: BackdropFilter(
           child: Container(
-            color: Theme.of(context).colorScheme.background.withOpacity(0.65),
+            color: Theme.of(context).colorScheme.background.withOpacity(0.7),
             child: appBarContent,
           ),
           filter: ImageFilter.blur(

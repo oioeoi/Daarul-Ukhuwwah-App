@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:daarul_ukhuwwah_media/bloc/hide_navbar.dart';
 import 'package:daarul_ukhuwwah_media/component/appbar.dart';
 import 'package:daarul_ukhuwwah_media/component/navbar.dart';
 import 'package:daarul_ukhuwwah_media/pages/AlbumPage.dart';
@@ -28,62 +27,65 @@ class _MyAppState extends State<MyApp> {
     Ionicons.settings_outline
   ];
   List iconListSelected = [Ionicons.home, Ionicons.albums, Ionicons.settings];
+  List labelListSelected = ['Home', 'Albums', 'Settings'];
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _navBarItemList = [];
     for (var index = 0; index < iconList.length; index++) {
       _navBarItemList.add(
-          buildNavigationItem(iconList[index], iconListSelected[index], index));
+        buildNavigationItem(
+          iconListSelected[index],
+          index,
+          labelListSelected[index],
+        ),
+      );
     }
 
-    return ChangeNotifierProvider(
-      create: (context) => BottomBarVisibilityProvider(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        home: Scaffold(
-          extendBodyBehindAppBar: true,
-          extendBody: true,
-          appBar: MyAppBar(
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Daarul Ukhuwwah Putra 1",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19.0,
-                      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      home: Scaffold(
+        extendBodyBehindAppBar: true,
+        extendBody: true,
+        appBar: MyAppBar(
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Daarul Ukhuwwah Putra 1",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
                     ),
-                    Icon(
-                      Icons.arrow_drop_down_rounded,
-                      size: 30,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down_rounded,
+                    size: 30,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
           ),
-          body: _barPage[selectedIndex],
-          bottomNavigationBar: MyNavBar(
-            content: Row(
-              children: _navBarItemList,
-            ),
+        ),
+        body: _barPage[selectedIndex],
+        bottomNavigationBar: MyNavBar(
+          content: Row(
+            children: _navBarItemList,
           ),
         ),
       ),
     );
   }
 
-  Widget buildNavigationItem(IconData icon, iconSelected, int index) {
+  Widget buildNavigationItem(IconData icon, int index, String label) {
     return GestureDetector(
       onTap: () {
         setState(
@@ -97,16 +99,20 @@ class _MyAppState extends State<MyApp> {
         child: Container(
           alignment: Alignment.bottomCenter,
           width: MediaQuery.of(context).size.width / iconList.length,
-          height: 60,
+          height: 50,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Icon(
-                index == selectedIndex ? iconSelected : icon,
+                icon,
                 color: index == selectedIndex ? Colors.blue : Colors.grey,
               ),
               Text(
-                'Home',
+                label,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: index == selectedIndex ? Colors.blue : Colors.grey,
+                ),
               )
             ],
           ),

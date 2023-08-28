@@ -58,7 +58,7 @@ class _MyNavBarState extends State<MyNavBar> {
     navBarContent = ClipRRect(
       child: BackdropFilter(
         child: Container(
-          color: Theme.of(context).colorScheme.background.withOpacity(0.65),
+          color: Theme.of(context).colorScheme.background.withOpacity(0.7),
           child: navBarContent,
         ),
         filter: ImageFilter.blur(

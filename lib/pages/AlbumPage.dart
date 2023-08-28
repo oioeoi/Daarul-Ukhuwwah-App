@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:daarul_ukhuwwah_media/model/img_movie.dart';
 import 'package:daarul_ukhuwwah_media/services/get_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,8 +17,8 @@ class _AlbumPageState extends State<AlbumPage> {
       child: ElevatedButton(
         child: const Icon(Icons.add),
         onPressed: () async {
-          Movie? result = await Services.getId(1);
-          print(result);
+          // var result = await Services.getAPI();
+          // print(result);
         },
       ),
     );
