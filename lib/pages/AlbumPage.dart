@@ -1,4 +1,4 @@
-import 'package:daarul_ukhuwwah_media/model/img_movie.dart';
+import 'package:daarul_ukhuwwah_media/model/carousel_model.dart';
 import 'package:daarul_ukhuwwah_media/services/get_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

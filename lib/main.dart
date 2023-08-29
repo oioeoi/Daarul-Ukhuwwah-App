@@ -8,7 +8,6 @@ import 'package:daarul_ukhuwwah_media/theme/dark.dart';
 import 'package:daarul_ukhuwwah_media/theme/light.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 

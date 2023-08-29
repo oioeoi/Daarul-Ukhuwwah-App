@@ -1,3 +1,4 @@
+import 'package:daarul_ukhuwwah_media/model/carousel_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -20,13 +21,13 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         setState(
           () {
+            // products berbentuk list of map
             products =
                 List<Map<String, dynamic>>.from(response.data['products']);
             _isLoading = false;
           },
         );
-        print(products);
-        print(products.length);
+        print(products[0]['images']);
       }
     } catch (e) {
       print('ini errornya : ' + e.toString());
@@ -54,25 +55,43 @@ class _HomePageState extends State<HomePage> {
               itemCount: products.length,
               itemBuilder: (BuildContext context, int index) {
                 Map<String, dynamic> product = products[index];
-                List images = product['images'];
-                // print(images.length);
-                // print(images);
-                String imageUrl = images.isNotEmpty ? images[0].toString() : '';
+                List images = products[index]['images'];
+                // List<dynamic> title = products[index]['title'];
+                // List description = products[index]['description'];
                 return Container(
-                  height: 600,
+                  height: 400,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: _isLoading ? Colors.grey : Colors.grey[100],
-                          image: DecorationImage(
-                            image: NetworkImage(imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      CarouselImage(listImage: images),
+                      // SingleChildScrollView(
+                      //   scrollDirection: Axis.vertical,
+                      //   child: ListView.builder(
+                      //     physics: NeverScrollableScrollPhysics(),
+                      //     scrollDirection: Axis.vertical,
+                      //     itemCount: images.length,
+                      //     shrinkWrap: true,
+                      //     itemBuilder: (context, index) {
+                      //       return Container(
+                      //         height: 100,
+                      //         width: 100,
+                      //         decoration: BoxDecoration(
+                      //           color:
+                      //               _isLoading ? Colors.grey : Colors.grey[100],
+                      //           image: DecorationImage(
+                      //             image: NetworkImage(
+                      //               images[index].toString(),
+                      //             ),
+                      //             fit: BoxFit.cover,
+                      //           ),
+                      //         ),
+                      //         child: Text(
+                      //           images[index].toString(),
+                      //         ),
+                      //       );
+                      //     },
+                      //   ),
+                      // ),
                       Center(
                         child: Text(
                           product['title'].toString(),
@@ -83,11 +102,6 @@ class _HomePageState extends State<HomePage> {
                           product['description'].toString(),
                         ),
                       ),
-                      Center(
-                        child: Text(
-                          images.toString(),
-                        ),
-                      )
                     ],
                   ),
                 );
