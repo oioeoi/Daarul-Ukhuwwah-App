@@ -1,15 +1,20 @@
-// import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 
-// class Services {
-//   static Future getAPI() async {
-//     try {
-//       var response = await Dio().get('https://dummyjson.com/products');
-//       List products = response.data['products'];
-//       if (response.statusCode == 200) {
-//         print(products.length);
-//       }
-//     } catch (e) {
-//       print('ini errornya : ' + e.toString());
-//     }
-//   }
-// }
+abstract class GetImage {
+  bool _isLoading = true;
+  List<Map<String, dynamic>> products = [];
+
+  Future getData() async {
+    var url = 'https://dummyjson.com/products';
+    try {
+      var response = await Dio().get(url);
+      if (response.statusCode == 200) {
+        // products berbentuk list of map
+        products = List<Map<String, dynamic>>.from(response.data['products']);
+        _isLoading = false;
+      }
+    } catch (e) {
+      print('ini errornya : ' + e.toString());
+    }
+  }
+}

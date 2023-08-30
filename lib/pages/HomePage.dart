@@ -1,4 +1,5 @@
-import 'package:daarul_ukhuwwah_media/model/carousel_model.dart';
+import 'package:daarul_ukhuwwah_media/component/carousel_model.dart';
+import 'package:daarul_ukhuwwah_media/component/post_view.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,8 +12,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
-  String json = '';
   List<Map<String, dynamic>> products = [];
+  Map<String, dynamic> product = {};
+  List images = [];
+  String title = '';
+  String desc = '';
 
   void getData() async {
     var url = 'https://dummyjson.com/products';
@@ -27,7 +31,6 @@ class _HomePageState extends State<HomePage> {
             _isLoading = false;
           },
         );
-        print(products[0]['images']);
       }
     } catch (e) {
       print('ini errornya : ' + e.toString());
@@ -54,56 +57,13 @@ class _HomePageState extends State<HomePage> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: products.length,
               itemBuilder: (BuildContext context, int index) {
-                Map<String, dynamic> product = products[index];
-                List images = products[index]['images'];
-                // List<dynamic> title = products[index]['title'];
-                // List description = products[index]['description'];
-                return Container(
-                  height: 400,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CarouselImage(listImage: images),
-                      // SingleChildScrollView(
-                      //   scrollDirection: Axis.vertical,
-                      //   child: ListView.builder(
-                      //     physics: NeverScrollableScrollPhysics(),
-                      //     scrollDirection: Axis.vertical,
-                      //     itemCount: images.length,
-                      //     shrinkWrap: true,
-                      //     itemBuilder: (context, index) {
-                      //       return Container(
-                      //         height: 100,
-                      //         width: 100,
-                      //         decoration: BoxDecoration(
-                      //           color:
-                      //               _isLoading ? Colors.grey : Colors.grey[100],
-                      //           image: DecorationImage(
-                      //             image: NetworkImage(
-                      //               images[index].toString(),
-                      //             ),
-                      //             fit: BoxFit.cover,
-                      //           ),
-                      //         ),
-                      //         child: Text(
-                      //           images[index].toString(),
-                      //         ),
-                      //       );
-                      //     },
-                      //   ),
-                      // ),
-                      Center(
-                        child: Text(
-                          product['title'].toString(),
-                        ),
-                      ),
-                      Center(
-                        child: Text(
-                          product['description'].toString(),
-                        ),
-                      ),
-                    ],
-                  ),
+                images = products[index]['images'];
+                title = products[index]['title'];
+                desc = products[index]['description'];
+                return PostView(
+                  images: images,
+                  title: title,
+                  desc: desc,
                 );
               },
             ),
