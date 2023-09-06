@@ -8,7 +8,7 @@ class PostView extends StatelessWidget {
       : super(key: key);
 
   final List images;
-  String title = '', desc = '';
+  String? title, desc;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,8 @@ class PostView extends StatelessWidget {
         children: [
           CarouselImage(listImage: images),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(
+                left: 14.0, right: 14, top: 8, bottom: 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -40,9 +41,9 @@ class PostView extends StatelessWidget {
                     Icon(Ionicons.bookmark_outline),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 8),
                 Text(
-                  title,
+                  title ?? 'kok kosong',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,

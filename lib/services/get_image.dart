@@ -1,20 +1,22 @@
+import 'package:daarul_ukhuwwah_media/model/api_model.dart';
 import 'package:dio/dio.dart';
 
 abstract class GetImage {
-  bool _isLoading = true;
-  List<Map<String, dynamic>> products = [];
-
-  Future getData() async {
-    var url = 'https://dummyjson.com/products';
+  static Future getData() async {
     try {
-      var response = await Dio().get(url);
+      var response = await Dio().get('https://dummyjson.com/products');
       if (response.statusCode == 200) {
-        // products berbentuk list of map
-        products = List<Map<String, dynamic>>.from(response.data['products']);
-        _isLoading = false;
+        Map obj = response.data;
+        return PostModel(
+          images: obj['products'][0]['images'],
+          title: obj['products'][0]['title'],
+          desc: obj['products'][0]['description'],
+        );
       }
+      return null;
     } catch (e) {
       print('ini errornya : ' + e.toString());
+      throw Exception(e.toString());
     }
   }
 }

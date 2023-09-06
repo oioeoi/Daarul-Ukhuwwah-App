@@ -1,11 +1,22 @@
+import 'package:daarul_ukhuwwah_media/component/profile_pict.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
 
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SafeArea(
+      child: Column(
+        children: [
+          Center(child: ProfilePict()),
+        ],
+      ),
+    );
   }
 }

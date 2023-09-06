@@ -1,4 +1,3 @@
-import 'package:daarul_ukhuwwah_media/component/carousel_model.dart';
 import 'package:daarul_ukhuwwah_media/component/post_view.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,19 +12,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   List<Map<String, dynamic>> products = [];
-  Map<String, dynamic> product = {};
   List images = [];
   String title = '';
   String desc = '';
 
-  void getData() async {
+  Future getData() async {
+    setState(() {
+      products.clear();
+      _isLoading = true;
+    });
     var url = 'https://dummyjson.com/products';
     try {
       var response = await Dio().get(url);
       if (response.statusCode == 200) {
         setState(
           () {
-            // products berbentuk list of map
             products =
                 List<Map<String, dynamic>>.from(response.data['products']);
             _isLoading = false;
@@ -51,21 +52,26 @@ class _HomePageState extends State<HomePage> {
               color: Colors.blue,
             ),
           )
-        : SingleChildScrollView(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: products.length,
-              itemBuilder: (BuildContext context, int index) {
-                images = products[index]['images'];
-                title = products[index]['title'];
-                desc = products[index]['description'];
-                return PostView(
-                  images: images,
-                  title: title,
-                  desc: desc,
-                );
-              },
+        : RefreshIndicator(
+            onRefresh: () => getData(),
+            color: Colors.blue,
+            displacement: 200,
+            child: SingleChildScrollView(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: products.length,
+                itemBuilder: (BuildContext context, int index) {
+                  images = products[index]['images'];
+                  title = products[index]['title'];
+                  desc = products[index]['description'];
+                  return PostView(
+                    images: images,
+                    title: title,
+                    desc: desc,
+                  );
+                },
+              ),
             ),
           );
   }
