@@ -15,6 +15,65 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           Center(child: ProfilePict()),
+          CupertinoListSection(
+            backgroundColor: Theme.of(context).colorScheme.background,
+            children: [
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+              CupertinoListTile(
+                leading: Icon(CupertinoIcons.settings),
+                title: Text('Setting Head'),
+                subtitle: Text('Subtitle'),
+                additionalInfo: Text('Additional'),
+              ),
+            ],
+          )
         ],
       ),
     );
