@@ -1,5 +1,6 @@
 import 'package:daarul_ukhuwwah_media/component/profile_pict.dart';
 import 'package:daarul_ukhuwwah_media/model/cuperListTile.dart';
+import 'package:daarul_ukhuwwah_media/screen/settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -39,17 +40,28 @@ class _ProfilePageState extends State<ProfilePage> {
 
     for (var i = 0; i < menu.length; i++) {
       listTiles.add(
-        CuperListTile(
-          icon: menu[i]['icon'],
-          title: menu[i]['title'],
-          children: [
-            Text(menu[i]['info']),
-            SizedBox(width: 8),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 16,
-            ),
-          ],
+        InkWell(
+          onTap: () {
+            setState(() {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AccountSettings(),
+                ),
+              );
+            });
+          },
+          child: CuperListTile(
+            icon: menu[i]['icon'],
+            title: menu[i]['title'],
+            children: [
+              Text(menu[i]['info']),
+              SizedBox(width: 8),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+              ),
+            ],
+          ),
         ),
       );
     }
