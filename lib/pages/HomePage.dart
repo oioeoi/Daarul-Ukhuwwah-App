@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:daarul_ukhuwwah_media/component/post_view.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,12 @@ class _HomePageState extends State<HomePage> {
   String desc = '';
 
   Future getData() async {
-    setState(() {
-      products.clear();
-      _isLoading = true;
-    });
+    setState(
+      () {
+        products.clear();
+        _isLoading = true;
+      },
+    );
     var url = 'https://dummyjson.com/products';
     try {
       var response = await Dio().get(url);

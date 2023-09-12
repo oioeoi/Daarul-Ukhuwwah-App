@@ -4,8 +4,6 @@ import 'package:daarul_ukhuwwah_media/component/navbar.dart';
 import 'package:daarul_ukhuwwah_media/pages/AlbumPage.dart';
 import 'package:daarul_ukhuwwah_media/pages/HomePage.dart';
 import 'package:daarul_ukhuwwah_media/pages/ProfilePage.dart';
-import 'package:daarul_ukhuwwah_media/theme/dark.dart';
-import 'package:daarul_ukhuwwah_media/theme/light.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -16,24 +14,33 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   int selectedIndex = 0;
-  List _barPage = [HomePage(), AlbumPage(), ProfilePage()];
-  List<IconData> iconList = [
-    Ionicons.home_outline,
-    Ionicons.albums_outline,
-    Ionicons.settings_outline
+  List<Map<String, dynamic>> barItem = [
+    {
+      'icon': Ionicons.home,
+      'label': 'Home',
+      'page': HomePage(),
+    },
+    {
+      'icon': Ionicons.albums,
+      'label': 'Albums',
+      'page': AlbumPage(),
+    },
+    {
+      'icon': Ionicons.person,
+      'label': 'Profile',
+      'page': ProfilePage(),
+    },
   ];
-  List iconListSelected = [Ionicons.home, Ionicons.albums, Ionicons.settings];
-  List labelListSelected = ['Home', 'Albums', 'Settings'];
 
   @override
   Widget build(BuildContext context) {
     List<Widget> _navBarItemList = [];
-    for (var index = 0; index < iconList.length; index++) {
+    for (var index = 0; index < barItem.length; index++) {
       _navBarItemList.add(
         buildNavigationItem(
-          iconListSelected[index],
+          barItem[index]['icon'],
           index,
-          labelListSelected[index],
+          barItem[index]['label'],
         ),
       );
     }
@@ -67,7 +74,7 @@ class _LandingPageState extends State<LandingPage> {
           ],
         ),
       ),
-      body: _barPage[selectedIndex],
+      body: barItem[selectedIndex]['page'],
       bottomNavigationBar: MyNavBar(
         content: Row(
           children: _navBarItemList,
@@ -82,14 +89,14 @@ class _LandingPageState extends State<LandingPage> {
         setState(
           () {
             selectedIndex = index;
-            _barPage[index];
+            barItem[selectedIndex]['page'];
           },
         );
       },
       child: SafeArea(
         child: Container(
           alignment: Alignment.bottomCenter,
-          width: MediaQuery.of(context).size.width / iconList.length,
+          width: MediaQuery.of(context).size.width / barItem.length,
           height: 50,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,

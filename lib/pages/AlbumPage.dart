@@ -12,66 +12,82 @@ class AlbumPage extends StatefulWidget {
 
 class _AlbumPageState extends State<AlbumPage> {
   bool _isLoading = true;
-  List<Map<String, dynamic>> productList = [];
+  List<Map<String, dynamic>> products = [];
+  List images = [];
 
-  Future fetchData() async {
+  Future getData() async {
+    if (!mounted) return;
+    setState(
+      () {
+        products.clear();
+        _isLoading = true;
+      },
+    );
+    var url = 'https://dummyjson.com/products';
     try {
-      var response = await Dio().get('https://dummyjson.com/products');
+      var response = await Dio().get(url);
       if (response.statusCode == 200) {
-        productList =
-            List<Map<String, dynamic>>.from(response.data['products']);
-        _isLoading = false;
-      } else {
-        setState(() => _isLoading = false);
-        print('Gagal mengambil data: ${response.statusCode}');
+        setState(
+          () {
+            products =
+                List<Map<String, dynamic>>.from(response.data['products']);
+            _isLoading = false;
+          },
+        );
       }
     } catch (e) {
-      setState(() => _isLoading = false);
-      print('Error: $e');
+      print('ini errornya : ' + e.toString());
     }
   }
 
   @override
   void initState() {
     super.initState();
-    fetchData();
-  }
-
-  @override
-  void dispose() {
-    fetchData();
-    super.dispose();
+    getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => fetchData(),
-      color: Colors.blue,
-      displacement: 200,
-      child: SingleChildScrollView(
-        child: FutureBuilder(
-          future: fetchData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return ListView.builder(
-                itemCount: productList.length,
-                itemBuilder: (context, index) {
-                  return PostView(
-                    images: productList[index]['images'],
-                    title: productList[index]['title'],
-                    desc: productList[index]['description'],
-                  );
-                },
-              );
-            }
-          },
-        ),
-      ),
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        var spacing = 2.0;
+        var rowCount = 3;
+
+        return SafeArea(
+          child: Wrap(
+            runSpacing: spacing,
+            spacing: spacing,
+            children: List.generate(
+              products.length,
+              (index) {
+                var item = products[index];
+                var size = (constraint.biggest.width - (rowCount * spacing)) /
+                    rowCount;
+                return InkWell(
+                  onTap: () => item["onTap"](),
+                  child: Container(
+                    height: size,
+                    width: size,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          products[index]['images'].toString(),
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(
+                          0.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

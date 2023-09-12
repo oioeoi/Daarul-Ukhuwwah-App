@@ -25,6 +25,9 @@ class _ProfilePictState extends State<ProfilePict> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
                   color: Colors.grey[100],
+                  image: DecorationImage(
+                    image: AssetImage('assets/profile.jpeg'),
+                  ),
                 ),
               ),
         TextButton(
@@ -35,11 +38,13 @@ class _ProfilePictState extends State<ProfilePict> {
                 actions: [
                   CupertinoActionSheetAction(
                     onPressed: () {
-                      setState(() {
-                        pictImageFromGalery();
-                        _isFilled = true;
-                        Navigator.pop(context);
-                      });
+                      setState(
+                        () {
+                          pictImageFromGalery();
+                          _isFilled = true;
+                          Navigator.pop(context);
+                        },
+                      );
                     },
                     child: Text(
                       'Choose Photo',
