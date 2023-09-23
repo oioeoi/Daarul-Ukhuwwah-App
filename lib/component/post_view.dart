@@ -1,4 +1,3 @@
-// ignore_for_file: must_be_immutable
 import 'package:daarul_ukhuwwah_media/component/carousel_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -8,7 +7,7 @@ class PostView extends StatelessWidget {
       : super(key: key);
 
   final List images;
-  String? title, desc;
+  final String? title, desc;
 
   @override
   Widget build(BuildContext context) {
