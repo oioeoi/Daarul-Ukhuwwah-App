@@ -1,7 +1,8 @@
 import 'package:daarul_ukhuwwah_media/model/post_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../services/api_model.dart';
+import '../services/fetch_dataTest.dart';
+import '../services/fetch_services.dart';
 
 class AlbumPage extends StatefulWidget {
   AlbumPage({super.key});
@@ -11,29 +12,20 @@ class AlbumPage extends StatefulWidget {
 
 class _AlbumPageState extends State<AlbumPage> {
   List<Product> users = [];
+  bool _isLoading = true;
+
   loadData() async {
-    final result = await ProductServices().fetchData();
-    List<dynamic> dataList = result;
-    for (var i = 0; i < result.length; i++) {
-      users.add(
-        Product(
-          id: dataList[i]['id'],
-          title: dataList[i]['title'],
-          description: dataList[i]['description'],
-          price: dataList[i]['price'],
-          discountPercentage: dataList[i]['discountPercentage'],
-          stock: dataList[i]['stock'],
-          brand: dataList[i]['brand'],
-          category: dataList[i]['category'],
-          thumbnail: dataList[i]['thumbnail'],
-          images: dataList[i]['images'],
-        ),
+    final result = await ProductServicesTest().fetchData();
+    users.addAll(result);
+
+    if (mounted == true) {
+      setState(
+        () {
+          _isLoading = false;
+        },
       );
     }
   }
-  // final data = users[i];
-  // final title = data.brand;
-  // print(title);
 
   @override
   void initState() {
@@ -43,56 +35,82 @@ class _AlbumPageState extends State<AlbumPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      return ListView.builder(
-        itemCount: users.length,
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          final data = users[index];
-          final title = data.brand;
-          final images = data.images[0];
-          return Container(
-            height: 100.0,
-            clipBehavior: Clip.antiAlias,
-            margin: EdgeInsets.only(
-              bottom: 12.0,
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
             ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  8.0,
-                ),
-              ),
-              image: DecorationImage(
-                image: NetworkImage(
-                  images,
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.6),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    '$title',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.red,
+          )
+        : Builder(builder: (context) {
+            return ListView.builder(
+              itemCount: users.length,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                final data = users[index];
+                final String title = data.title.toString();
+                final String images = data.images[0];
+                final String sub = data.price.toString();
+                return Card(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        images,
+                      ),
+                    ),
+                    title: Text(title),
+                    subtitle: Text(sub),
+                    trailing: IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.add,
+                        size: 24.0,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    });
+                );
+
+                // Container(
+                //   height: 100.0,
+                //   clipBehavior: Clip.antiAlias,
+                //   margin: EdgeInsets.only(
+                //     bottom: 12.0,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.all(
+                //       Radius.circular(
+                //         8.0,
+                //       ),
+                //     ),
+                //     image: DecorationImage(
+                //       image: NetworkImage(
+                //         images,
+                //       ),
+                //       fit: BoxFit.cover,
+                //     ),
+                //   ),
+                //   child: Stack(
+                //     children: [
+                //       Container(
+                //         decoration: BoxDecoration(
+                //           color: Colors.black.withOpacity(0.6),
+                //         ),
+                //       ),
+                //       Center(
+                //         child: Text(
+                //           '$title',
+                //           style: TextStyle(
+                //               fontSize: 20.0,
+                //               color: Colors.white,
+                //               fontWeight: FontWeight.bold),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // );
+              },
+            );
+          });
     // LayoutBuilder(
     //   builder: (context, constraint) {
     //     var spacing = 2.0;

@@ -4,6 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../model/post_model.dart';
+import '../services/fetch_services.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
@@ -11,72 +14,73 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // bool _isLoading = true;
-  // List<Map<String, dynamic>> products = [];
-  // List images = [];
-  // String title = '';
-  // String desc = '';
+  bool _isLoading = true;
+  List<Product> users = [];
 
-  // Future getData() async {
-  //   setState(
-  //     () {
-  //       products.clear();
-  //       _isLoading = true;
-  //     },
-  //   );
-  //   var url = 'https://dummyjson.com/products';
-  //   try {
-  //     var response = await Dio().get(url);
-  //     if (response.statusCode == 200) {
-  //       setState(
-  //         () {
-  //           products =
-  //               List<Map<String, dynamic>>.from(response.data['products']);
-  //           _isLoading = false;
-  //         },
-  //       );
-  //     }
-  //   } catch (e) {
-  //     print('ini errornya : ' + e.toString());
-  //   }
-  // }
+  loadData() async {
+    final result = await ProductServices().fetchData();
+    List<dynamic> dataList = result;
+    for (var i = 0; i < result.length; i++) {
+      users.add(
+        Product(
+          id: dataList[i]['id'],
+          title: dataList[i]['title'],
+          description: dataList[i]['description'],
+          price: dataList[i]['price'],
+          discountPercentage: dataList[i]['discountPercentage'],
+          stock: dataList[i]['stock'],
+          brand: dataList[i]['brand'],
+          category: dataList[i]['category'],
+          thumbnail: dataList[i]['thumbnail'],
+          images: dataList[i]['images'],
+        ),
+      );
+    }
+    if (mounted == true) {
+      setState(
+        () {
+          _isLoading = false;
+        },
+      );
+    }
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getData();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.blue[100]);
-    //   _isLoading
-    //       ? Center(
-    //           child: CircularProgressIndicator(
-    //             color: Colors.blue,
-    //           ),
-    //         )
-    //       : RefreshIndicator(
-    //           onRefresh: () => getData(),
-    //           color: Colors.blue,
-    //           displacement: 200,
-    //           child: SingleChildScrollView(
-    //             child: ListView.builder(
-    //               shrinkWrap: true,
-    //               physics: NeverScrollableScrollPhysics(),
-    //               itemCount: products.length,
-    //               itemBuilder: (BuildContext context, int index) {
-    //                 images = products[index]['images'];
-    //                 title = products[index]['title'];
-    //                 desc = products[index]['description'];
-    //                 return PostView(
-    //                   images: images,
-    //                   title: title,
-    //                   desc: desc,
-    //                 );
-    //               },
-    //             ),
-    //           ),
-    //         );
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
+            ),
+          )
+        : RefreshIndicator(
+            onRefresh: () => loadData(),
+            color: Colors.blue,
+            displacement: 200,
+            child: SingleChildScrollView(
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: users.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final data = users[index];
+                  final List images = data.images;
+                  final String title = data.title.toString();
+                  final String desc = data.description.toString();
+                  return PostView(
+                    images: images,
+                    title: title,
+                    desc: desc,
+                  );
+                },
+              ),
+            ),
+          );
   }
 }
