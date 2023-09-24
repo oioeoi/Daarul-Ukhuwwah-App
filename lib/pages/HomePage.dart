@@ -15,13 +15,10 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
 
   loadData() async {
-    final result = await ProductServices().fetchData();
-    if (result == null) return;
-
-    if (mounted == true && result != null) {
+    users = await ProductServices().fetchData();
+    if (mounted == true) {
       setState(
         () {
-          users.addAll(result);
           _isLoading = false;
         },
       );
