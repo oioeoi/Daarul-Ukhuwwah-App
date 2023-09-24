@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'package:daarul_ukhuwwah_media/component/post_view.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 import '../model/post_model.dart';
 import '../services/fetch_services.dart';
 
@@ -14,31 +11,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _isLoading = true;
   List<Product> users = [];
+  bool _isLoading = true;
 
   loadData() async {
     final result = await ProductServices().fetchData();
-    List<dynamic> dataList = result;
-    for (var i = 0; i < result.length; i++) {
-      users.add(
-        Product(
-          id: dataList[i]['id'],
-          title: dataList[i]['title'],
-          description: dataList[i]['description'],
-          price: dataList[i]['price'],
-          discountPercentage: dataList[i]['discountPercentage'],
-          stock: dataList[i]['stock'],
-          brand: dataList[i]['brand'],
-          category: dataList[i]['category'],
-          thumbnail: dataList[i]['thumbnail'],
-          images: dataList[i]['images'],
-        ),
-      );
-    }
-    if (mounted == true) {
+    if (result == null) return;
+
+    if (mounted == true && result != null) {
       setState(
         () {
+          users.addAll(result);
           _isLoading = false;
         },
       );
