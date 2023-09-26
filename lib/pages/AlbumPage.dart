@@ -1,7 +1,8 @@
 import 'package:daarul_ukhuwwah_media/model/post_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../services/fetch_services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/product_bloc.dart';
 
 class AlbumPage extends StatefulWidget {
   AlbumPage({super.key});
@@ -10,44 +11,26 @@ class AlbumPage extends StatefulWidget {
 }
 
 class _AlbumPageState extends State<AlbumPage> {
-  List<Product> users = [];
-  bool _isLoading = true;
-
-  loadData() async {
-    final result = await ProductServices().fetchData();
-
-    if (mounted == true) {
-      setState(
-        () {
-          users.addAll(result);
-          _isLoading = false;
-        },
-      );
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? Center(
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, state) {
+        if (state is ProductLoading) {
+          return Center(
             child: CircularProgressIndicator(
               color: Colors.blue,
             ),
-          )
-        : Builder(
+          );
+        }
+        if (state is ProductSuccess) {
+          return Builder(
             builder: (context) {
               return ListView.builder(
-                itemCount: users.length,
+                itemCount: state.products.length,
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  final data = users[index];
+                  final data = state.products[index];
                   final String title = data.title.toString();
                   final String images = data.images[0];
                   final String sub = data.price.toString();
@@ -73,5 +56,11 @@ class _AlbumPageState extends State<AlbumPage> {
               );
             },
           );
+        }
+        return Center(
+          child: Text('No Data'),
+        );
+      },
+    );
   }
 }
