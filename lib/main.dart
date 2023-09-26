@@ -1,6 +1,5 @@
 import 'package:daarul_ukhuwwah_media/theme/light.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:daarul_ukhuwwah_media/component/appbar.dart';
 import 'package:daarul_ukhuwwah_media/component/navbar.dart';
 import 'package:daarul_ukhuwwah_media/pages/AlbumPage.dart';
@@ -8,6 +7,7 @@ import 'package:daarul_ukhuwwah_media/pages/HomePage.dart';
 import 'package:daarul_ukhuwwah_media/pages/ProfilePage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'bloc/product_bloc.dart';
+import 'bloc/theme_bloc.dart';
 import 'theme/dark.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,13 +18,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductBloc()..add(GetProductEvent()),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        home: LandingPage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductBloc()..add(GetProductEvent()),
+        ),
+        BlocProvider(
+          create: (context) => ThemeBloc(),
+        )
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeMode>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            themeMode: state,
+            darkTheme: darkTheme,
+            home: LandingPage(),
+          );
+        },
       ),
     );
   }
@@ -84,7 +96,7 @@ class _LandingPageState extends State<LandingPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Daarul Ukhuwwah",
+                        "SocialBuzzz",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20.0,
@@ -96,7 +108,26 @@ class _LandingPageState extends State<LandingPage> {
                       )
                     ],
                   ),
-                  Icon(Ionicons.moon),
+                  BlocBuilder<ThemeBloc, ThemeMode>(
+                    builder: (context, state) {
+                      return IconButton(
+                        onPressed: () {
+                          context.read<ThemeBloc>().add(ToggleThemeIconEvent());
+                          context.read<ThemeBloc>().add(
+                                ThemeChange(
+                                  state == ThemeMode.dark ? false : true,
+                                ),
+                              );
+                        },
+                        icon: Icon(
+                          context.select((ThemeBloc bloc) =>
+                              bloc.state == ThemeMode.dark
+                                  ? Ionicons.sunny
+                                  : Ionicons.moon),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
