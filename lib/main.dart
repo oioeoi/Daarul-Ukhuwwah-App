@@ -1,17 +1,22 @@
-import 'package:daarul_ukhuwwah_media/theme/light.dart';
+import 'package:daarul_ukhuwwah_media/logic/theme_bloc/theme_bloc.dart';
+import 'package:daarul_ukhuwwah_media/themes/light.dart';
 import 'package:flutter/material.dart';
-import 'package:daarul_ukhuwwah_media/component/appbar.dart';
 import 'package:daarul_ukhuwwah_media/component/navbar.dart';
 import 'package:daarul_ukhuwwah_media/pages/AlbumPage.dart';
 import 'package:daarul_ukhuwwah_media/pages/HomePage.dart';
 import 'package:daarul_ukhuwwah_media/pages/ProfilePage.dart';
+import 'package:flutter/services.dart';
 import 'package:ionicons/ionicons.dart';
-import 'bloc/product_bloc.dart';
-import 'bloc/theme_bloc.dart';
-import 'theme/dark.dart';
+import 'logic/product_bloc/product_bloc.dart';
+import 'themes/dark.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,7 +30,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ThemeBloc(),
-        )
+        ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeMode>(
         builder: (context, state) {
@@ -81,67 +86,9 @@ class _LandingPageState extends State<LandingPage> {
     }
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      appBar: MyAppBar(
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "SocialBuzzz",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_drop_down_rounded,
-                        size: 30,
-                      )
-                    ],
-                  ),
-                  BlocBuilder<ThemeBloc, ThemeMode>(
-                    builder: (context, state) {
-                      return IconButton(
-                        onPressed: () {
-                          context.read<ThemeBloc>().add(ToggleThemeIconEvent());
-                          context.read<ThemeBloc>().add(
-                                ThemeChange(
-                                  state == ThemeMode.dark ? false : true,
-                                ),
-                              );
-                        },
-                        icon: Icon(
-                          context.select((ThemeBloc bloc) =>
-                              bloc.state == ThemeMode.dark
-                                  ? Ionicons.sunny
-                                  : Ionicons.moon),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-          ],
-        ),
-      ),
       body: barItem[selectedIndex]['page'],
       bottomNavigationBar: MyNavBar(
-        content: Row(
-          children: _navBarItemList,
-        ),
+        content: Row(children: _navBarItemList),
       ),
     );
   }

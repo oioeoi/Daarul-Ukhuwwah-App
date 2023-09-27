@@ -1,6 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/product_bloc.dart';
+import '../logic/product_bloc/product_bloc.dart';
 
 class AlbumPage extends StatefulWidget {
   AlbumPage({super.key});
@@ -21,38 +23,57 @@ class _AlbumPageState extends State<AlbumPage> {
           );
         }
         if (state is ProductSuccess) {
-          return Builder(
-            builder: (context) {
-              return ListView.builder(
-                itemCount: state.products.length,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  final data = state.products[index];
-                  final String title = data.title.toString();
-                  final String images = data.images[0];
-                  final String sub = data.price.toString();
-                  return Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          images,
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Albums',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              elevation: 0,
+              flexibleSpace: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+            ),
+            body: Builder(
+              builder: (context) {
+                return ListView.builder(
+                  itemCount: state.products.length,
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    final data = state.products[index];
+                    final String title = data.title.toString();
+                    final String images = data.images[0];
+                    final String sub = data.price.toString();
+                    return Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            images,
+                          ),
+                        ),
+                        title: Text(title),
+                        subtitle: Text(sub),
+                        trailing: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.add,
+                            size: 24.0,
+                          ),
                         ),
                       ),
-                      title: Text(title),
-                      subtitle: Text(sub),
-                      trailing: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.add,
-                          size: 24.0,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
+                    );
+                  },
+                );
+              },
+            ),
           );
         }
         return Center(

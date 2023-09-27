@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../model/post_model.dart';
+import '../../models/post_model.dart';
 import 'package:http/http.dart' as http;
 part 'product_event.dart';
 part 'product_state.dart';

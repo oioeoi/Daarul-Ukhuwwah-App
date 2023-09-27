@@ -1,8 +1,14 @@
+import 'dart:ui';
+
 import 'package:daarul_ukhuwwah_media/component/profile_pict.dart';
-import 'package:daarul_ukhuwwah_media/model/cuperListTile.dart';
-import 'package:daarul_ukhuwwah_media/screen/settings_screen.dart';
+import 'package:daarul_ukhuwwah_media/models/cuperListTile.dart';
+import 'package:daarul_ukhuwwah_media/screens/delete_screen.dart';
+import 'package:daarul_ukhuwwah_media/screens/post_screen.dart';
+import 'package:daarul_ukhuwwah_media/screens/settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../screens/login_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,21 +20,25 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Map<String, dynamic>> menu = [
     {
       'icon': CupertinoIcons.add,
+      'page': LoginScreen(),
       'title': 'Account',
       'info': 'oioeoi',
     },
     {
       'icon': CupertinoIcons.settings,
+      'page': AccountSettings(),
       'title': 'Settings',
       'info': 'settings',
     },
     {
       'icon': CupertinoIcons.camera,
+      'page': PostScreen(),
       'title': 'Camera',
       'info': 'camera',
     },
     {
       'icon': CupertinoIcons.delete,
+      'page': DeleteScreen(),
       'title': 'Delete',
       'info': 'delete',
     },
@@ -45,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
             setState(() {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AccountSettings(),
+                  builder: (context) => menu[i]['page'],
                 ),
               );
             });
@@ -65,9 +75,27 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
-    return SafeArea(
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        elevation: 0,
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      ),
+      body: Column(
         children: [
+          SizedBox(height: 20),
           Center(child: ProfilePict()),
           CupertinoListSection(
             topMargin: 0,

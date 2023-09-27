@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:daarul_ukhuwwah_media/screen/pict_screen.dart';
+import 'package:daarul_ukhuwwah_media/screens/pict_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
