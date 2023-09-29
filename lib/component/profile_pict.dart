@@ -92,7 +92,7 @@ class _ProfilePictState extends State<ProfilePict> {
           child: Text(
             'Edit',
             style: TextStyle(
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onBackground,
             ),
           ),
         )

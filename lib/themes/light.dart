@@ -7,8 +7,8 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white.withAlpha(200),
   ),
   colorScheme: ColorScheme.light(
-    background: Colors.grey[200]!,
-    primary: Colors.grey[100]!,
-    secondary: Colors.grey[300]!,
-  ),
+      background: Colors.grey[200]!,
+      primary: Colors.grey[100]!,
+      secondary: Colors.grey[300]!,
+      tertiary: Colors.grey[200]!),
 );
