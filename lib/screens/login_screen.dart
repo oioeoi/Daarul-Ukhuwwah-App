@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:ui';
-
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +12,31 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _emailValid = true;
+  bool _passwordValid = true;
+  bool _isPasswordVisible = true;
+  String password = '';
+  String email = '';
+  Timer? debounce;
+
+  @override
+  void dispose() {
+    debounce?.cancel();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -57,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Blur(
               blur: 10.0,
-              blurColor: Colors.blueGrey,
+              blurColor: Colors.black,
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -96,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       child: Text(
-                        "Crashbook",
+                        "Dubaniin",
                         style: GoogleFonts.pacifico(
                           color: Colors.white,
                           fontSize: 40.0,
@@ -110,14 +135,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                            controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
-                            cursorColor: Colors.blueGrey,
-                            onChanged: (value) {
-                              //
+                            onFieldSubmitted: (value) =>
+                                setState(() => this.email = value),
+                            onChanged: (String value) {
+                              if (debounce?.isActive ?? false)
+                                debounce?.cancel();
+                              debounce = Timer(Duration(milliseconds: 500), () {
+                                setState(() {
+                                  _emailValid = validateEmail(value) == null;
+                                  this.email = value;
+                                });
+                              });
                             },
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
+                              errorText: _emailValid
+                                  ? null
+                                  : 'Please enter a valid email',
+                              errorStyle: TextStyle(
+                                color: Colors.red[400],
+                                fontWeight: FontWeight.bold,
+                              ),
                               hintText: "Your email",
+                              hintStyle: TextStyle(color: Colors.grey[500]),
                               prefixIcon: Padding(
                                 padding: EdgeInsets.all(16.0),
                                 child: Icon(Icons.person),
@@ -127,14 +169,57 @@ class _LoginScreenState extends State<LoginScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
                             child: TextFormField(
+                              controller: _passwordController,
+                              keyboardType: TextInputType.visiblePassword,
                               textInputAction: TextInputAction.done,
-                              obscureText: true,
-                              cursorColor: Colors.blueGrey,
+                              obscureText: _isPasswordVisible,
+                              onFieldSubmitted: (value) =>
+                                  setState(() => this.password = value),
                               onChanged: (value) {
-                                //
+                                if (debounce?.isActive ?? false)
+                                  debounce?.cancel();
+                                debounce = Timer(
+                                  Duration(milliseconds: 500),
+                                  () => setState(
+                                    () {
+                                      _passwordValid =
+                                          validatePassword(value) == null;
+                                      this.password = value;
+                                    },
+                                  ),
+                                );
                               },
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
+                                suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() => _isPasswordVisible =
+                                        !_isPasswordVisible);
+                                  },
+                                  child: _isPasswordVisible
+                                      ? Padding(
+                                          padding: EdgeInsets.only(right: 10),
+                                          child: Icon(
+                                            Icons.visibility,
+                                            size: 24,
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: EdgeInsets.only(right: 10),
+                                          child: Icon(
+                                            Icons.visibility_off,
+                                            size: 24,
+                                          ),
+                                        ),
+                                ),
+                                errorText: _passwordValid
+                                    ? null
+                                    : 'Password must be at least 8 characters long',
+                                errorStyle: TextStyle(
+                                  color: Colors.red[400],
+                                  fontWeight: FontWeight.bold,
+                                ),
                                 hintText: "Your password",
+                                hintStyle: TextStyle(color: Colors.grey[500]),
                                 prefixIcon: Padding(
                                   padding: EdgeInsets.all(16.0),
                                   child: Icon(Icons.lock),
@@ -232,5 +317,26 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  String? validateEmail(String value) {
+    if (value.isEmpty) {
+      return 'Please enter your email';
+    }
+    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+        .hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? validatePassword(String value) {
+    if (value.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+    return null;
   }
 }

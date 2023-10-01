@@ -222,11 +222,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                       ),
                     ),
                   ),
-                  onFieldSubmitted: (value) => setState(
-                    () {
-                      this.password = value;
-                    },
-                  ),
+                  onFieldSubmitted: (value) =>
+                      setState(() => this.password = value),
                   onChanged: (value) {
                     if (debounce?.isActive ?? false) debounce?.cancel();
                     debounce = Timer(

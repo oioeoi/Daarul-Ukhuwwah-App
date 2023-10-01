@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "391409420887",
+    "project_id": "myapp-271200",
+    "storage_bucket": "myapp-271200.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391409420887:android:6264a59e2e5b2c54867112",
+        "android_client_info": {
+          "package_name": "com.example.daarul_ukhuwwah_media"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391409420887-8pbkbvtnp9goknepmhn8t2oshtim0abj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtuiUF6XUI2S8D-1YtXp6KZNpdU_pGxt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391409420887-8pbkbvtnp9goknepmhn8t2oshtim0abj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
